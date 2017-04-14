@@ -1,0 +1,93 @@
+--- jbibtex-1.0.15/src/main/javacc/bibtex.jj.orig
++++ jbibtex-1.0.15/src/main/javacc/bibtex.jj
+@@ -29,7 +29,7 @@
+ 	private long id = 1L;
+ 
+ 
+-	public BibTeXParser() throws ParseException, TokenMgrException {
++	public BibTeXParser() throws ParseException, TokenMgrError {
+ 		this("");
+ 
+ 		// Default macros
+@@ -53,13 +53,13 @@
+ 	 *
+ 	 * @throws ObjectResolutionException If the database is inconsistent.
+ 	 *
+-	 * @throws TokenMgrException If a token cannot be produced.
++	 * @throws TokenMgrError If a token cannot be produced.
+ 	 * @throws ParseException If the produced sequence of tokens cannot be consumed.
+ 	 *
+ 	 * @see CharacterFilterReader
+ 	 */
+-	public BibTeXDatabase parse(Reader reader) throws ObjectResolutionException, ParseException, TokenMgrException {
+-		ReInit(new StreamProvider(reader));
++	public BibTeXDatabase parse(Reader reader) throws ObjectResolutionException, ParseException, TokenMgrError {
++		ReInit(reader);
+ 
+ 		token_source.SwitchTo(IN_HEADER);
+ 
+@@ -75,14 +75,14 @@
+ 	 *
+ 	 * @see CharacterFilterReader
+ 	 */
+-	public BibTeXDatabase parseFully(Reader reader) throws ObjectResolutionException {
+-		ReInit(new StreamProvider(reader));
++	public BibTeXDatabase parseFully(Reader reader) throws ObjectResolutionException, ParseException, TokenMgrError {
++		ReInit(reader);
+ 
+ 		token_source.SwitchTo(IN_HEADER);
+ 
+ 		try {
+ 			return Database(true);
+-		} catch(TokenMgrException tme){
++		} catch(TokenMgrError tme){
+ 			throw new RuntimeException(tme);
+ 		} catch(ParseException pe){
+ 			throw new RuntimeException(pe);
+@@ -350,7 +350,7 @@
+ 			<COMMA>
+ 			|
+ 			object = Object() { database.addObject(object); }
+-		} catch(TokenMgrException tme){
++		} catch(TokenMgrError tme){
+ 
+ 			if(!performErrorRecovery){
+ 				throw tme;
+@@ -782,4 +782,4 @@
+ 		jj_ntk = -1;
+ 		token_source.SwitchTo(state);
+ 	}
+-}
+\ No newline at the end of file
++}
+--- jbibtex-1.0.15/src/main/javacc/latex.jj.orig
++++ jbibtex-1.0.15/src/main/javacc/latex.jj
+@@ -26,17 +26,17 @@
+ 	/**
+ 	 * @see LaTeXParser#parse(Reader)
+ 	 */
+-	public List<LaTeXObject> parse(String string) throws ParseException, TokenMgrException {
++	public List<LaTeXObject> parse(String string) throws IOException, ParseException {
+ 		return parse(new StringReader(string));
+ 	}
+ 
+ 	/**
+-	 * @throws TokenMgrException If the input contains invalid characters
++	 * @throws TokenMgrError If the input contains invalid characters
+ 	 *
+ 	 * @see CharacterFilterReader
+ 	 */
+-	public List<LaTeXObject> parse(Reader reader) throws ParseException, TokenMgrException {
+-		ReInit(new StreamProvider(reader));
++	public List<LaTeXObject> parse(Reader reader) throws IOException, ParseException {
++		ReInit(reader);
+ 
+ 		return LaTeX();
+ 	}
+@@ -250,4 +250,4 @@
+ 	{
+ 		return token.image;
+ 	}
+-}
+\ No newline at the end of file
++}
