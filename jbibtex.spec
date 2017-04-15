@@ -15,8 +15,8 @@ BuildArch:	noarch
 BuildRequires:	jpackage-utils
 BuildRequires:	java-headless
 BuildRequires:	maven-local
-# The following are required for testing propouse
 BuildRequires:	mvn(junit:junit)
+BuildRequires:	mvn(org.codehaus.mojo:javacc-maven-plugin)
 
 %description
 Java BibTeX and LaTeX parser and formatter library.
