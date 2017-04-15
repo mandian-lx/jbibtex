@@ -47,7 +47,7 @@ find . -name "*.jar" -delete
 find . -name "*.class" -delete
 
 # Apply all patches
-#patch0 -p1 -b .orig
+%patch0 -p1 -b .orig
 
 # fix jar-not-indexed warning
 %pom_add_plugin :maven-jar-plugin . "<configuration>
